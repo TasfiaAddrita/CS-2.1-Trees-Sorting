@@ -68,9 +68,20 @@ def insertion_sort(items):
     # TODO: Repeat until all items are in sorted order
     # TODO: Take first unsorted item
     # TODO: Insert it in sorted order in front of items
-    pass
+    
+    for index in range(1, len(items)):
+        # print(index)
+        # if items[index] >= items[index - 1]:
+        #     continue
+        # else:
+        move = index
+        while items[move] < items[move - 1] and move > 0:
+            items[move], items[move - 1] = items[move - 1], items[move]
+            move -= 1
+    return items
 
-# lst = [5, 4, 3, 2, 1]
+lst = [5, 4, 3, 2, 1]
 # lst = [1, 2, 3, 5, 4]
 # print(bubble_sort(lst))
 # print(selection_sort(lst))
+print(insertion_sort(lst))

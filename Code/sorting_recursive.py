@@ -21,11 +21,12 @@ def merge(items1, items2):
             merge_arr.append(items2[lst2_index])
             lst2_index += 1
         else:
-            # merge_arr.append(items1[lst1_index])
-            # merge_arr.append(items2[lst2_index])
+            merge_arr.append(items1[lst1_index])
+            merge_arr.append(items2[lst2_index])
             lst1_index += 1
             lst2_index += 1
 
+    # --- in case we can't use the .extend function --- 
     # if lst1_index == len(items1):
     #     for num in items2[lst2_index:]:
     #         merge_arr.append(num)
@@ -36,14 +37,7 @@ def merge(items1, items2):
     merge_arr.extend(items1[lst1_index:])
     merge_arr.extend(items2[lst2_index:])
 
-    print("merge", merge_arr)
     return merge_arr
-
-# lst1 = [1, 3, 5, 7, 9]
-# lst1 = [1, 3, 5, 7, 9, 11, 13, 15]
-# lst2 = [2, 4, 6, 8, 10]
-# lst2 = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
-#  (merge(lst1, lst2))
 
 def split_sort_merge(items):
     """Sort given items by splitting list into two approximately equal halves,
@@ -55,12 +49,7 @@ def split_sort_merge(items):
     # Sort each half using any other sorting algorithm
     # Merge sorted halves into one list in sorted order
     lst1, lst2 = bubble_sort(items[0 : len(items)//2]), selection_sort(items[len(items)//2 : len(items)])
-    return merge(lst1, lst2)
-
-# print(split_sort_merge([10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
-# print(split_sort_merge([38, 29, 49, 10, 68, 39, 58, 20]))
-# print(split_sort_merge([5, 3]))
-# print(split_sort_merge([7, 4, 1, 13, 14, 5, 17, 9, 9, 8]))
+    items[:] = merge(lst1, lst2)
 
 def merge_sort(items):
     """Sort given items by splitting list into two approximately equal halves,
@@ -72,30 +61,31 @@ def merge_sort(items):
     # Sort each half by recursively calling merge sort
     # Merge sorted halves into one list in sorted order
 
+    # --- returns a new array of sorted elements --- 
     # if len(items) <= 1:
     #     return items
     # mid = len(items)//2
     # left_half = merge_sort(items[0:mid])
     # right_half = merge_sort(items[mid:len(items)])
     # return merge(left_half, right_half)
-    print(items)
+
+    # left = items[:mid]
+    # right = items[mid:]
+    # merge_sort(left)
+    # merge_sort(right)
+    # merged = merge(left, right)
+    # items[:] = merged
+    
+
+    # --- thanks Ben and Shash --- 
     if len(items) > 1:
         mid = len(items) // 2
-        merge_sort(items[:mid])
-        merge_sort(items[mid:])
-        # merge(items[:mid], items[mid:])
-        # print(items)
-        merged = merge(items[:mid], items[mid:])
+        left = items[:mid]
+        right = items[mid:]
+        merge_sort(left)
+        merge_sort(right)
+        merged = merge(left, right)
         items[:] = merged
-        # return items
-
-lst = [16, 16, 9, 7, 13, 15, 19, 9, 15, 12]
-# print(merge_sort([10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
-# print(merge_sort([7, 5, 13, 18, 19, 14, 17, 2, 7, 14]))
-# print(merge_sort([16, 16, 9, 7, 13, 15, 19, 9, 15, 12]))
-# print(merge_sort(['B', 'A']))
-print(merge_sort(lst))
-print(lst)
 
 def partition(items, low, high):
     """Return index `p` after in-place partitioning given items in range
@@ -123,26 +113,3 @@ def quick_sort(items, low=None, high=None):
     # TODO: Partition items in-place around a pivot and get index of pivot
     # TODO: Sort each sublist range by recursively calling quick sort
     pass
-
-
-# def merge_sort(a): 
-#     if len(a) > 1: 
-#         mid = len(a) // 2
-#         L = a[:mid] 
-#         R = a[mid:] 
-#         merge_sort(L) 
-#         merge_sort(R) 
-          
-#         a.clear() 
-#         while len(L) > 0 and len(R) < 0: 
-#             if L[0] <= R[0]: 
-#                 a.append(L[0]) 
-#                 L.pop(0) 
-#             else: 
-#                 a.append(R[0]) 
-#                 R.pop(0) 
-  
-#         for i in L: 
-#             a.append(i) 
-#         for i in R: 
-#             a.append(i) 
