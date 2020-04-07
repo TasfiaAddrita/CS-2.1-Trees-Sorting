@@ -78,7 +78,7 @@ class IsSortedTest(unittest.TestCase):
         # TODO: Write more negative test cases with assert is False statements
         # ...
 
-
+# @unittest.SkipTest
 class IntegerSortTest(unittest.TestCase):
 
     def test_sort_on_empty_list(self):
@@ -121,6 +121,7 @@ class IntegerSortTest(unittest.TestCase):
     def test_sort_on_lists_of_random_integers(self):
         # Generate list of 10 random integers from range [1...20]
         items1 = random_ints(10, 1, 20)
+        print(items1)
         sorted_items1 = sorted(items1)  # Create a copy of list in sorted order
         sort(items1)  # Call mutative sort function to sort list items in place
         assert items1 == sorted_items1
@@ -156,7 +157,7 @@ class IntegerSortTest(unittest.TestCase):
         sort(items3)  # Mutate
         assert items3 == sorted_items3
 
-
+# @unittest.SkipTest
 class StringSortTest(unittest.TestCase):
 
     def test_sort_on_small_lists_of_strings(self):
@@ -185,7 +186,7 @@ class StringSortTest(unittest.TestCase):
         sort(items)  # Mutate
         assert items == sorted_items
 
-
+@unittest.SkipTest
 def get_sort_function():
     """Read command-line argument and return sort function with that name."""
     import sys
@@ -215,7 +216,10 @@ def get_sort_function():
 
 
 # If using PyTest, change this variable to the sort function you want to test
-sort = bubble_sort
+# sort = bubble_sort
+# sort = selection_sort
+# sort = split_sort_merge
+sort = merge_sort
 
 
 if __name__ == '__main__':
