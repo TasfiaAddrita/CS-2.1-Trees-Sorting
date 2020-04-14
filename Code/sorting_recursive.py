@@ -127,6 +127,7 @@ def merge_sort(items):
 
 #     return size, 'merge' if merge_time > insertion_time else 'insertion'
 
+
 def partition(items, low, high):
     """
     Return index `p` after in-place partitioning given items in range
@@ -138,12 +139,20 @@ def partition(items, low, high):
         
         Memory usage: ??? Why and under what conditions?
     """
-    # TODO: Choose a pivot any way and document your method in docstring above
-    # TODO: Loop through all items in range [low...high]
-    # TODO: Move items less than pivot into front of range [low...p-1]
-    # TODO: Move items greater than pivot into back of range [p+1...high]
-    # TODO: Move pivot item into final position [p] and return index p
-    pass
+    # Choose a pivot any way and document your method in docstring above
+    divider = low 
+    pivot = high # last item as pivot
+    # Loop through all items in range [low..high]
+    for index in range(low, high):
+        # Move items less than pivot into front of range [low...p-1]
+        # Move items greater than pivot into back of range [p+1...high]
+        if items[index] < items[pivot]:
+            # swap with divider
+            items[index], items[divider] = items[divider], items[index]
+            divider += 1
+    # Move pivot item into final position [p] and return index p
+    items[pivot], items[divider] = items[divider], items[pivot]
+    return divider
 
 
 def quick_sort(items, low=None, high=None):
@@ -156,24 +165,41 @@ def quick_sort(items, low=None, high=None):
         
         Memory usage: ??? Why and under what conditions?
     """
-    # TODO: Check if high and low range bounds have default values (not given)
-    # TODO: Check if list or range is so small it's already sorted (base case)
-    # TODO: Partition items in-place around a pivot and get index of pivot
-    # TODO: Sort each sublist range by recursively calling quick sort
-    pass
+    # Check if high and low range bounds have default values (not given)
+    if low is None or high is None:
+        low = 0
+        high = len(items) - 1
+    # Check if list or range is so small it's already sorted (base case)
+    if (high - low) > 0:
+        # Partition items in-place around a pivot and get index of pivot
+        pivot = partition(items, low, high)
+        # Sort each sublist range by recursively calling quick sort
+        quick_sort(items, low, pivot - 1)
+        quick_sort(items, pivot + 1, high)
 
 if __name__ == "__main__":
-    a = [9, 8, 7, 6, 5, 4, 3, 2, 1]
-    b = random_ints(50, 1, 30)
-    c = random_ints(1000, 1, 100)
-    d = random_ints(1000000, 1, 1000)
+    # a = [9, 8, 7, 6, 5, 4, 3, 2, 1]
+    # b = random_ints(50, 1, 30)
+    # c = random_ints(1000, 1, 100)
+    # d = random_ints(1000000, 1, 1000)
+    # e = random_ints(15, 1, 50)
+    # f = [4, 5, 7, 3, 1, 9, 6, 5]
 
-    start = timer()
-    merge_sort(d)
-    end = timer()
-    print('merge', round((end - start) * 1000, 5))
+    # start = timer()
+    # merge_sort(d)
+    # end = timer()
+    # print('merge', round((end - start) * 1000, 5))
 
-    start = timer()
-    insertion_sort(d)
-    end = timer()
-    print('insertion', round((end - start) * 1000, 5))
+    # start = timer()
+    # insertion_sort(d)
+    # end = timer()
+    # print('insertion', round((end - start) * 1000, 5))
+
+    # print(f, 'original')
+    # print(partition(f, 0, len(f)))
+    # print(f, 'partioned')
+
+    lst = [41, 35, 9, 40, 18, 21, 29, 20, 35, 12, 46, 12, 3, 28, 40] # dups 12, 35, 40
+    print(lst)
+    quick_sort(lst)
+    print(lst)
