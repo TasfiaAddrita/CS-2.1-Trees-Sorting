@@ -178,7 +178,7 @@ class IntegerSortTest(unittest.TestCase):
         sort(items3)  # Mutate
         assert items3 == sorted_items3
 
-# @unittest.SkipTest
+@unittest.SkipTest
 class StringSortTest(unittest.TestCase):
 
     def test_sort_on_small_lists_of_strings(self):
@@ -247,7 +247,8 @@ def get_sort_function():
 # sort = insertion_sort
 # sort = split_sort_merge
 # sort = merge_sort
-sort = quick_sort
+# sort = quick_sort
+sort = counting_sort
 
 
 if __name__ == '__main__':
