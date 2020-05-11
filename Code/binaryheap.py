@@ -11,6 +11,7 @@ class BinaryMinHeap(object):
         """Initialize this heap and insert the given items, if any."""
         # Initialize an empty list to store the items
         self.items = []
+        self.sorted = [] # expensive for space (?), maybe for static arrays
         if items:
             for item in items:
                 self.insert(item)
@@ -21,8 +22,8 @@ class BinaryMinHeap(object):
 
     def is_empty(self):
         """Return True if this heap is empty, or False otherwise."""
-        # TODO: Check if empty based on how many items are in the list
-        # ...
+        # Check if empty based on how many items are in the list
+        return self.items == 0
 
     def size(self):
         """Return the number of items in this heap."""
@@ -30,8 +31,8 @@ class BinaryMinHeap(object):
 
     def insert(self, item):
         """Insert the given item into this heap.
-        TODO: Best case running time: ??? under what conditions?
-        TODO: Worst case running time: ??? under what conditions?"""
+        Best case running time: O(1), if no swaps have to be made
+        Worst case running time: O(log n), if item is the smallest number in the heap"""
         # Insert the item at the end and bubble up to the root
         self.items.append(item)
         if self.size() > 1:
@@ -47,15 +48,18 @@ class BinaryMinHeap(object):
 
     def delete_min(self):
         """Remove and return the minimum item at the root of this heap.
-        TODO: Best case running time: ??? under what conditions?
-        TODO: Worst case running time: ??? under what conditions?"""
+        Best case running time: O(1), size of binary heap is less than 2
+        Worst case running time: O(log n), min item is a leaf"""
         if self.size() == 0:
             raise ValueError('Heap is empty and has no minimum item')
         elif self.size() == 1:
             # Remove and return the only item
-            return self.items.pop()
+            item = self.items.pop()
+            self.sorted.append(item)
+            return item
         assert self.size() > 1
         min_item = self.items[0]
+        self.sorted.append(min_item)
         # Move the last item to the root and bubble down to the leaves
         last_item = self.items.pop()
         self.items[0] = last_item
@@ -67,8 +71,8 @@ class BinaryMinHeap(object):
         """Remove and return the minimum item at the root of this heap,
         and insert the given item into this heap.
         This method is more efficient than calling delete_min and then insert.
-        TODO: Best case running time: ??? under what conditions?
-        TODO: Worst case running time: ??? under what conditions?"""
+        Best case running time: O(1), given item is the minimum
+        Worst case running time: 0(log n), given item is the maximum"""
         if self.size() == 0:
             raise ValueError('Heap is empty and has no minimum item')
         assert self.size() > 0
@@ -78,6 +82,13 @@ class BinaryMinHeap(object):
         if self.size() > 1:
             self._bubble_down(0)
         return min_item
+
+    def heap_sort(self):
+        """
+        Sort all items
+        running time: O(n log n)
+        """
+        return self.sorted
 
     def _bubble_up(self, index):
         """Ensure the heap ordering property is true above the given index,
@@ -94,10 +105,11 @@ class BinaryMinHeap(object):
         # Get the parent's index and value
         parent_index = self._parent_index(index)
         parent_item = self.items[parent_index]
-        # TODO: Swap this item with parent item if values are out of order
-        # ...
-        # TODO: Recursively bubble up again if necessary
-        # ...
+        # Swap this item with parent item if values are out of order
+        if parent_item > item:
+            self.items[parent_index], self.items[index] = item, parent_item
+        # Recursively bubble up again if necessary
+        self._bubble_up(parent_index)
 
     def _bubble_down(self, index):
         """Ensure the heap ordering property is true below the given index,
@@ -114,14 +126,17 @@ class BinaryMinHeap(object):
             return  # This index is a leaf node (does not have any children)
         # Get the item's value
         item = self.items[index]
-        # TODO: Determine which child item to compare this node's item to
-        child_index = 0
-        # ...
-        # TODO: Swap this item with a child item if values are out of order
+        # Determine which child item to compare this node's item to
+        if right_index >= self.size():
+            child_index = left_index
+        else:
+            child_index = left_index if (self.items[left_index] < self.items[right_index]) else right_index
+        # Swap this item with a child item if values are out of order
         child_item = self.items[child_index]
-        # ...
-        # TODO: Recursively bubble down again if necessary
-        # ...
+        if item > child_item:
+            self.items[child_index], self.items[index] = item, child_item
+        # Recursively bubble down again if necessary
+        self._bubble_down(child_index)
 
     def _last_index(self):
         """Return the last valid index in the underlying array of items."""
@@ -166,6 +181,8 @@ def test_binary_min_heap():
         print('heap: {}'.format(heap))
         print('size: {}'.format(heap.size()))
 
+    print('\nItems sorted:')
+    print(heap.heap_sort())
 
 if __name__ == '__main__':
     test_binary_min_heap()

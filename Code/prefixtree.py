@@ -39,30 +39,82 @@ class PrefixTree:
 
     # look at how to use _find_node to complete this method
     def contains(self, string):
-        """Return True if this prefix tree contains the given string."""
-        node = self.root
-        for char in string:
-            if not node.has_child(char):
-                return False
-            node = node.get_child(char)
-        return node.is_terminal()
+        """
+        Return True if this prefix tree contains the given string.
+        
+        Time complexity: 
+            let M = length of given string
+            Best: O(1), if first char of string is not a child of the root node
+            # Average: O(M)
+            Worst: O(M) 
+        
+        Space complexity: O(1), no extra memory is utilized
+        """
+
+        node, depth = self._find_node(string)
+        # if string is 'ABC' then node = ('C'), depth = 3
+
+        return depth == len(string) and node.is_terminal()
+
+        # if depth == len(string):
+        #     return node.is_terminal()
+        # return False
+    
+        # old implementation;
+        # node = self.root
+        # for char in string: # O(n)
+        #     if not node.has_child(char): # O(1)
+        #         return False
+        #     node = node.get_child(char) # O(1)
+        # return node.is_terminal() # O(1)
 
     def insert(self, string):
-        """Insert the given string into this prefix tree."""
-        node = self.root
-        for char in string:
-            if not node.has_child(char):
-                node.add_child(char, PrefixTreeNode(char))
-            node = node.get_child(char)
-        if not node.is_terminal():
+        """
+        Insert the given string into this prefix tree.
+        
+        Time complexity: 
+            let M = length of string
+            Best: O(M), even if the string exists in the tree, still have to traverse through all characters
+            Average: O(M)
+            Worst: O(M)
+        
+        Space complexity: 
+            Best: O(1), if the string already exists in the tree, no need to make a new child node
+            Worst: O(M), adding a single child node every iteration (M child nodes)
+        """
+        node, depth = self._find_node(string)
+        for char in string[depth:]:
+            # if not node.has_child(char): # O(1) # always true when inserting a new node
+            node.add_child(char, PrefixTreeNode(char)) # O(1) 
+            node = node.get_child(char) # O(1)
+        if not node.is_terminal(): # O(1)
             node.terminal = True
             self.size += 1
 
+        # node = self.root
+        # for char in string: # O(n)
+        #     if not node.has_child(char): # O(1)
+        #         node.add_child(char, PrefixTreeNode(char)) # O(1)
+        #     node = node.get_child(char) # O(1)
+        # if not node.is_terminal(): # O(1)
+        #     node.terminal = True
+        #     self.size += 1
+
     def _find_node(self, string):
-        """Return a pair containing the deepest node in this prefix tree that
+        """
+        Return a pair containing the deepest node in this prefix tree that
         matches the longest prefix of the given string and the node's depth.
         The depth returned is equal to the number of prefix characters matched.
-        Search is done iteratively with a loop starting from the root node."""
+        Search is done iteratively with a loop starting from the root node.
+        
+        Time complexity: 
+            let M = length of string
+            Best: O(M)
+            Average: O(M)
+            Worst: O(M)
+        
+        Space complexity: O(1)
+        """
         # Match the empty string
         # Start with the root node
         node = self.root
@@ -71,39 +123,79 @@ class PrefixTree:
             if node.has_child(char):
                 node = node.get_child(char)
                 depth += 1
+            else:
+                # print(string, 'break loop')
+                break
         return node, depth
+
+        # 1st iteration: char: 'A', node: root -> ('A'), depth: 0 -> 1
+        # 2nd iteration: char: 'J', node: ('A') -> break, depth: 1
+        # skips 3rd iteration: char: 'B', node: ('A') -> ('B'), depth: 1 -> 2
+        # returns ('A'), 1
         
-    # use _traverse
     def complete(self, prefix):
-        """Return a list of all strings stored in this prefix tree that start
-        with the given prefix string."""
+        """
+        Return a list of all strings stored in this prefix tree that start
+        with the given prefix string.
+        
+        Time complexity: 
+            let M = length of string
+            Best: 
+            Average: 
+            Worst: 
+        
+        Space complexity:
+        """
         # Create a list of completions in prefix tree
         completions = []
-        node, depth = self._find_node(prefix)
-        print(node, depth)
-        if depth == 0:
+        node, depth = self._find_node(prefix) # a partial string can be found but still fail
+        # print(node, depth)
+        if depth == 0: 
             return []
         self._traverse(node, prefix, completions.append)
         return completions
 
-    # use _traverse
     def strings(self):
-        """Return a list of all strings stored in this prefix tree."""
+        """
+        Return a list of all strings stored in this prefix tree.
+        
+        Time complexity: 
+            let N = number of nodes in the tree
+            Best: O()
+            Average: 
+            Worst: 
+        
+        Space complexity:
+        """
         # Create a list of all strings in prefix tree
         all_strings = []
         self._traverse(self.root, "", all_strings.append)
         return all_strings
 
     def _traverse(self, node, prefix, visit):
-        """Traverse this prefix tree with recursive depth-first traversal.
+        """
+        Traverse this prefix tree with recursive depth-first traversal.
         Start at the given node with the given prefix representing its path in
-        this prefix tree and visit each node with the given visit function."""
+        this prefix tree and visit each node with the given visit function.
+        
+        Time complexity: 
+            let ...
+            Best: 
+            Average: 
+            Worst: 
+        
+        Space complexity:
+        """
         if node.is_terminal():
             visit(prefix)
         
         for char in node.children:
             child = node.get_child(char)
             self._traverse(child, prefix + char, visit)
+    
+    def delete(self, string):
+        # node = self._find_node()
+        pass
 
 
 def create_prefix_tree(strings):

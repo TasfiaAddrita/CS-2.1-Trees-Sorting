@@ -110,7 +110,18 @@ class TestBinaryMinHeap(unittest.TestCase):
         assert heap._right_child_index(5) == 12
         assert heap._left_child_index(6) == 13
         assert heap._right_child_index(6) == 14
-
-
+    
+    def test_heap_sort(self):
+        heap = BinaryMinHeap()
+        items = random.sample(range(1000), 50)
+        for item in items:
+            heap.insert(item)
+        assert heap.size() == len(items)
+        sorted_heap = heap.heap_sort()
+        assert sorted_heap == []
+        for item in sorted(items):
+            assert heap.delete_min() == item
+        assert heap.heap_sort() == sorted(items)
+        
 if __name__ == '__main__':
     unittest.main()

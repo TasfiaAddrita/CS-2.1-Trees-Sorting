@@ -140,6 +140,16 @@ class PrefixTreeTest(unittest.TestCase):
         assert node_Z.is_terminal() is True
         assert node_Z.num_children() == 0
 
+        tree.insert('AJBE')
+        node_J = node_A.get_child('J')
+        assert node_J.has_child('B')
+        node_B2 = node_J.get_child('B')
+        assert node_B2.has_child('E')
+        node_E = node_B2.get_child('E')
+        assert node_E.is_terminal()
+
+
+
     def test_size_and_is_empty(self):
         tree = PrefixTree()
         # Verify size after initializing tree
@@ -212,6 +222,14 @@ class PrefixTreeTest(unittest.TestCase):
         assert tree.contains('X') is False
         assert tree.contains('Y') is False
         assert tree.contains('Z') is False
+        assert tree.contains('AJB') is False
+        assert tree.contains('AJC') is False
+        assert tree.contains('AJD') is False
+        assert tree.contains('JKX') is False
+        assert tree.contains('JKY') is False
+        assert tree.contains('JKZ') is False
+        assert tree.contains('JKXYZ') is False
+        assert tree.contains('AJBC') is False
 
     def test_complete(self):
         strings = ['ABC', 'ABD', 'A', 'XYZ']
@@ -232,6 +250,8 @@ class PrefixTreeTest(unittest.TestCase):
         assert tree.complete('X') == ['XYZ']
         assert tree.complete('Y') == []
         assert tree.complete('Z') == []
+        assert tree.complete('AJB') == []
+        assert tree.complete('JKX') == []
 
     def test_strings(self):
         tree = PrefixTree()
